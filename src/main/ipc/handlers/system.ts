@@ -53,6 +53,21 @@ export interface SystemHandlerDependencies {
 }
 
 /**
+ * Append the web server's security token path to a cloudflared tunnel base URL.
+ * cloudflared only exposes the hostname; Maestro requires /$TOKEN in the path.
+ */
+export function appendSecurityTokenPath(tunnelUrl: string, tokenPath: string): string {
+	if (!tokenPath || tokenPath === '/') {
+		return tunnelUrl;
+	}
+	const normalized = tunnelUrl.replace(/\/$/, '');
+	if (normalized.endsWith(tokenPath) || normalized.includes(`${tokenPath}/`)) {
+		return tunnelUrl;
+	}
+	return normalized + tokenPath;
+}
+
+/**
  * Register all system-related IPC handlers.
  */
 export function registerSystemHandlers(deps: SystemHandlerDependencies): void {
@@ -344,10 +359,10 @@ export function registerSystemHandlers(deps: SystemHandlerDependencies): void {
 		const result = await tunnelManager.start(port);
 
 		if (result.success && result.url) {
-			// Append the token path to the tunnel URL for security
-			// e.g., "https://xyz.trycloudflare.com" + "/TOKEN" = "https://xyz.trycloudflare.com/TOKEN"
-			const fullTunnelUrl = result.url + tokenPath;
-			return { success: true, url: fullTunnelUrl };
+			return {
+				success: true,
+				url: appendSecurityTokenPath(result.url, tokenPath),
+			};
 		}
 
 		return result;
@@ -359,7 +374,21 @@ export function registerSystemHandlers(deps: SystemHandlerDependencies): void {
 	});
 
 	ipcMain.handle('tunnel:getStatus', async () => {
-		return tunnelManager.getStatus();
+		const status = tunnelManager.getStatus();
+		if (!status.isRunning || !status.url) {
+			return status;
+		}
+
+		const serverUrl = getWebServer()?.getSecureUrl();
+		if (!serverUrl) {
+			return status;
+		}
+
+		const tokenPath = new URL(serverUrl).pathname;
+		return {
+			...status,
+			url: appendSecurityTokenPath(status.url, tokenPath),
+		};
 	});
 
 	// ============ DevTools Handlers ============

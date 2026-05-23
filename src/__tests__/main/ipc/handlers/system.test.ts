@@ -820,30 +820,55 @@ describe('system IPC handlers', () => {
 	});
 
 	describe('tunnel:getStatus', () => {
-		it('should return tunnel status', async () => {
-			const mockStatus = {
-				running: true,
+		it('should return tunnel status with security token appended to URL', async () => {
+			mockWebServer.getSecureUrl.mockReturnValue(
+				'http://192.168.1.10:3456/7d7f7162-614c-43e2-bb8a-8a8123c2f56a'
+			);
+			vi.mocked(mockTunnelManager.getStatus).mockReturnValue({
+				isRunning: true,
 				url: 'https://abc.trycloudflare.com',
-			};
-			vi.mocked(mockTunnelManager.getStatus).mockReturnValue(mockStatus);
+				error: null,
+			});
 
 			const handler = handlers.get('tunnel:getStatus');
 			const result = await handler!({} as any);
 
-			expect(result).toEqual(mockStatus);
+			expect(result).toEqual({
+				isRunning: true,
+				url: 'https://abc.trycloudflare.com/7d7f7162-614c-43e2-bb8a-8a8123c2f56a',
+				error: null,
+			});
 		});
 
-		it('should return stopped status', async () => {
-			const mockStatus = {
-				running: false,
+		it('should return stopped status without modifying URL', async () => {
+			vi.mocked(mockTunnelManager.getStatus).mockReturnValue({
+				isRunning: false,
 				url: null,
-			};
-			vi.mocked(mockTunnelManager.getStatus).mockReturnValue(mockStatus);
+				error: null,
+			});
 
 			const handler = handlers.get('tunnel:getStatus');
 			const result = await handler!({} as any);
 
-			expect(result).toEqual(mockStatus);
+			expect(result).toEqual({
+				isRunning: false,
+				url: null,
+				error: null,
+			});
+		});
+
+		it('should not double-append token when URL already includes it', async () => {
+			mockWebServer.getSecureUrl.mockReturnValue('http://localhost:3000/secret-token');
+			vi.mocked(mockTunnelManager.getStatus).mockReturnValue({
+				isRunning: true,
+				url: 'https://abc.trycloudflare.com/secret-token',
+				error: null,
+			});
+
+			const handler = handlers.get('tunnel:getStatus');
+			const result = await handler!({} as any);
+
+			expect(result.url).toBe('https://abc.trycloudflare.com/secret-token');
 		});
 	});
 
