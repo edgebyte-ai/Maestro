@@ -9,7 +9,18 @@ import {
 	ClaudeOutputParser,
 	OpenCodeOutputParser,
 	CodexOutputParser,
+	CopilotCliOutputParser,
+	CursorAgentOutputParser,
 } from '../../../main/parsers';
+
+const EXPECTED_PARSER_IDS = [
+	'claude-code',
+	'opencode',
+	'codex',
+	'factory-droid',
+	'copilot-cli',
+	'cursor-agent',
+].sort();
 
 describe('parsers/index', () => {
 	beforeEach(() => {
@@ -49,21 +60,45 @@ describe('parsers/index', () => {
 			expect(hasOutputParser('factory-droid')).toBe(true);
 		});
 
-		it('should register exactly 4 parsers', () => {
+		it('should register Copilot CLI parser', () => {
+			expect(hasOutputParser('copilot-cli')).toBe(false);
+
+			initializeOutputParsers();
+
+			expect(hasOutputParser('copilot-cli')).toBe(true);
+		});
+
+		it('should register Cursor Agent parser', () => {
+			expect(hasOutputParser('cursor-agent')).toBe(false);
+
+			initializeOutputParsers();
+
+			expect(hasOutputParser('cursor-agent')).toBe(true);
+		});
+
+		it('should register the expected parser set', () => {
 			initializeOutputParsers();
 
 			const parsers = getAllOutputParsers();
-			expect(parsers.length).toBe(4); // Claude, OpenCode, Codex, Factory Droid
+			expect(parsers.map((parser) => parser.agentId).sort()).toEqual(EXPECTED_PARSER_IDS);
 		});
 
 		it('should clear existing parsers before registering', () => {
 			// First initialization
 			initializeOutputParsers();
-			expect(getAllOutputParsers().length).toBe(4);
+			expect(
+				getAllOutputParsers()
+					.map((parser) => parser.agentId)
+					.sort()
+			).toEqual(EXPECTED_PARSER_IDS);
 
-			// Second initialization should still have exactly 4
+			// Second initialization should still have the same parser set
 			initializeOutputParsers();
-			expect(getAllOutputParsers().length).toBe(4);
+			expect(
+				getAllOutputParsers()
+					.map((parser) => parser.agentId)
+					.sort()
+			).toEqual(EXPECTED_PARSER_IDS);
 		});
 	});
 
@@ -73,7 +108,11 @@ describe('parsers/index', () => {
 
 			ensureParsersInitialized();
 
-			expect(getAllOutputParsers().length).toBe(4);
+			expect(
+				getAllOutputParsers()
+					.map((parser) => parser.agentId)
+					.sort()
+			).toEqual(EXPECTED_PARSER_IDS);
 		});
 
 		it('should be idempotent after first call', () => {
@@ -108,6 +147,18 @@ describe('parsers/index', () => {
 			const parser = getOutputParser('codex');
 			expect(parser).not.toBeNull();
 			expect(parser).toBeInstanceOf(CodexOutputParser);
+		});
+
+		it('should return CopilotCliOutputParser for copilot-cli', () => {
+			const parser = getOutputParser('copilot-cli');
+			expect(parser).not.toBeNull();
+			expect(parser).toBeInstanceOf(CopilotCliOutputParser);
+		});
+
+		it('should return CursorAgentOutputParser for cursor-agent', () => {
+			const parser = getOutputParser('cursor-agent');
+			expect(parser).not.toBeNull();
+			expect(parser).toBeInstanceOf(CursorAgentOutputParser);
 		});
 
 		it('should return null for terminal', () => {

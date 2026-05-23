@@ -673,6 +673,114 @@ const FACTORY_DROID_ERROR_PATTERNS: AgentErrorPatterns = {
 	],
 };
 
+const COPILOT_CLI_ERROR_PATTERNS: AgentErrorPatterns = {
+	auth_expired: [
+		{
+			pattern: /authentication failed|not authenticated|unauthorized|401|login required/i,
+			message:
+				'GitHub Copilot authentication failed. Re-authenticate the Copilot CLI and try again.',
+			recoverable: true,
+		},
+	],
+	token_exhaustion: [
+		{
+			pattern: /prompt.*too long|context.*too long|maximum.*tokens|token limit/i,
+			message:
+				'The Copilot CLI context window was exceeded. Start a new session or shorten the prompt.',
+			recoverable: true,
+		},
+	],
+	rate_limited: [
+		{
+			pattern: /rate limit|too many requests|429/i,
+			message: 'GitHub Copilot rate limit reached. Wait a moment and try again.',
+			recoverable: true,
+		},
+	],
+	network_error: [
+		{
+			pattern: /network error|connection refused|timed out|econnreset|enotfound|fetch failed/i,
+			message: 'Network error while talking to GitHub Copilot. Check your connection and retry.',
+			recoverable: true,
+		},
+	],
+	permission_denied: [
+		{
+			pattern: /permission denied|forbidden|403|access denied/i,
+			message: 'GitHub Copilot does not have permission to perform that action.',
+			recoverable: false,
+		},
+	],
+	session_not_found: [
+		{
+			pattern: /session.*not found|unknown session|invalid session/i,
+			message: 'The Copilot CLI session could not be resumed. Start a new session.',
+			recoverable: true,
+		},
+	],
+	agent_crashed: [
+		{
+			pattern: /unexpected error|fatal|panic|crashed|exited with code/i,
+			message: 'GitHub Copilot CLI crashed unexpectedly. Try again or restart the agent.',
+			recoverable: true,
+		},
+	],
+};
+
+const CURSOR_AGENT_ERROR_PATTERNS: AgentErrorPatterns = {
+	auth_expired: [
+		{
+			pattern:
+				/authentication failed|not authenticated|unauthorized|401|login required|token expired/i,
+			message: 'Cursor Agent authentication failed. Sign in again and retry.',
+			recoverable: true,
+		},
+	],
+	token_exhaustion: [
+		{
+			pattern: /prompt.*too long|context.*too long|maximum.*tokens|context window/i,
+			message:
+				'The Cursor Agent context window was exceeded. Start a new session or shorten the prompt.',
+			recoverable: true,
+		},
+	],
+	rate_limited: [
+		{
+			pattern: /rate limit|too many requests|429/i,
+			message: 'Cursor Agent is being rate limited. Wait a moment and try again.',
+			recoverable: true,
+		},
+	],
+	network_error: [
+		{
+			pattern: /network error|connection refused|timed out|econnreset|enotfound|fetch failed/i,
+			message: 'Network error while talking to Cursor Agent. Check your connection and retry.',
+			recoverable: true,
+		},
+	],
+	permission_denied: [
+		{
+			pattern: /permission denied|forbidden|403|access denied/i,
+			message: 'Cursor Agent does not have permission to perform that action.',
+			recoverable: false,
+		},
+	],
+	session_not_found: [
+		{
+			pattern: /session.*not found|unknown session|invalid session|resume.*failed/i,
+			message: 'The Cursor Agent session could not be resumed. Start a new session.',
+			recoverable: true,
+		},
+	],
+	agent_crashed: [
+		{
+			pattern: /unexpected error|fatal|panic|crashed|exited with code/i,
+			message: 'Cursor Agent crashed unexpectedly. Try again or restart the agent.',
+			recoverable: true,
+		},
+	],
+};
+
 // ============================================================================
 // SSH Error Patterns
 // ============================================================================
@@ -864,6 +972,8 @@ const patternRegistry = new Map<ToolType, AgentErrorPatterns>([
 	['opencode', OPENCODE_ERROR_PATTERNS],
 	['codex', CODEX_ERROR_PATTERNS],
 	['factory-droid', FACTORY_DROID_ERROR_PATTERNS],
+	['copilot-cli', COPILOT_CLI_ERROR_PATTERNS],
+	['cursor-agent', CURSOR_AGENT_ERROR_PATTERNS],
 ]);
 
 /**

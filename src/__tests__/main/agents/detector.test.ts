@@ -4,6 +4,7 @@ import {
 	AgentConfig,
 	AgentConfigOption,
 	AgentCapabilities,
+	AGENT_DEFINITIONS,
 } from '../../../main/agents';
 
 // Mock dependencies
@@ -278,8 +279,8 @@ describe('agent-detector', () => {
 
 			const agents = await detector.detectAgents();
 
-			// Should have all 8 agents (terminal, claude-code, codex, gemini-cli, qwen3-coder, opencode, factory-droid, aider)
-			expect(agents.length).toBe(8);
+			// Should have one detected entry per agent definition.
+			expect(agents.length).toBe(AGENT_DEFINITIONS.length);
 
 			const agentIds = agents.map((a) => a.id);
 			expect(agentIds).toContain('terminal');
@@ -290,6 +291,8 @@ describe('agent-detector', () => {
 			expect(agentIds).toContain('opencode');
 			expect(agentIds).toContain('factory-droid');
 			expect(agentIds).toContain('aider');
+			expect(agentIds).toContain('copilot-cli');
+			expect(agentIds).toContain('cursor-agent');
 		});
 
 		it('should mark agents as available when binary is found', async () => {
@@ -924,8 +927,8 @@ describe('agent-detector', () => {
 
 			const result = await detectPromise;
 			expect(result).toBeDefined();
-			// Should have all 8 agents (terminal, claude-code, codex, gemini-cli, qwen3-coder, opencode, factory-droid, aider)
-			expect(result.length).toBe(8);
+			// Should have one detected entry per agent definition even if cache is cleared mid-flight.
+			expect(result.length).toBe(AGENT_DEFINITIONS.length);
 		});
 
 		it('should handle very long PATH', async () => {
