@@ -78,7 +78,14 @@ interface EditAgentModalProps {
 }
 
 // Supported agents that are fully implemented
-const SUPPORTED_AGENTS = ['claude-code', 'opencode', 'codex', 'factory-droid'];
+const SUPPORTED_AGENTS = [
+	'claude-code',
+	'opencode',
+	'codex',
+	'factory-droid',
+	'copilot-cli',
+	'cursor-agent',
+];
 
 export function NewInstanceModal({
 	isOpen,
