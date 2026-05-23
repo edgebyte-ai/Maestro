@@ -9,6 +9,8 @@ export { ClaudeSessionStorage, ClaudeSessionOriginsData } from './claude-session
 export { OpenCodeSessionStorage } from './opencode-session-storage';
 export { CodexSessionStorage } from './codex-session-storage';
 export { FactoryDroidSessionStorage } from './factory-droid-session-storage';
+export { CopilotCliSessionStorage } from './copilot-cli-session-storage';
+export { CursorAgentSessionStorage } from './cursor-agent-session-storage';
 
 import Store from 'electron-store';
 import { registerSessionStorage } from '../agents';
@@ -16,6 +18,8 @@ import { ClaudeSessionStorage, ClaudeSessionOriginsData } from './claude-session
 import { OpenCodeSessionStorage } from './opencode-session-storage';
 import { CodexSessionStorage } from './codex-session-storage';
 import { FactoryDroidSessionStorage } from './factory-droid-session-storage';
+import { CopilotCliSessionStorage } from './copilot-cli-session-storage';
+import { CursorAgentSessionStorage } from './cursor-agent-session-storage';
 
 /**
  * Options for initializing session storages
@@ -36,4 +40,6 @@ export function initializeSessionStorages(options?: InitializeSessionStoragesOpt
 	registerSessionStorage(new OpenCodeSessionStorage());
 	registerSessionStorage(new CodexSessionStorage());
 	registerSessionStorage(new FactoryDroidSessionStorage());
+	registerSessionStorage(new CopilotCliSessionStorage());
+	registerSessionStorage(new CursorAgentSessionStorage());
 }

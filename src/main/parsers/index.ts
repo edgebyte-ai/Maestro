@@ -54,6 +54,8 @@ import { ClaudeOutputParser } from './claude-output-parser';
 import { OpenCodeOutputParser } from './opencode-output-parser';
 import { CodexOutputParser } from './codex-output-parser';
 import { FactoryDroidOutputParser } from './factory-droid-output-parser';
+import { CopilotCliOutputParser } from './copilot-cli-output-parser';
+import { CursorAgentOutputParser } from './cursor-agent-output-parser';
 import {
 	registerOutputParser,
 	clearParserRegistry,
@@ -66,6 +68,8 @@ export { ClaudeOutputParser } from './claude-output-parser';
 export { OpenCodeOutputParser } from './opencode-output-parser';
 export { CodexOutputParser } from './codex-output-parser';
 export { FactoryDroidOutputParser } from './factory-droid-output-parser';
+export { CopilotCliOutputParser } from './copilot-cli-output-parser';
+export { CursorAgentOutputParser } from './cursor-agent-output-parser';
 
 const LOG_CONTEXT = '[OutputParsers]';
 
@@ -82,6 +86,8 @@ export function initializeOutputParsers(): void {
 	registerOutputParser(new OpenCodeOutputParser());
 	registerOutputParser(new CodexOutputParser());
 	registerOutputParser(new FactoryDroidOutputParser());
+	registerOutputParser(new CopilotCliOutputParser());
+	registerOutputParser(new CursorAgentOutputParser());
 
 	// Log registered parsers for debugging
 	const registeredParsers = getAllOutputParsers().map((p) => p.agentId);

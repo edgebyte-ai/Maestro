@@ -354,6 +354,66 @@ export const AGENT_CAPABILITIES: Record<string, AgentCapabilities> = {
 	},
 
 	/**
+	 * Copilot CLI - GitHub Copilot CLI
+	 * Non-interactive mode with stream-json output.
+	 */
+	'copilot-cli': {
+		supportsResume: true, // --session-id flag
+		supportsReadOnlyMode: true, // --plan flag
+		supportsJsonOutput: true, // --output-format stream-json
+		supportsSessionId: true, // session_id in JSON output
+		supportsImageInput: true, // --attachment flag
+		supportsImageInputOnResume: false, // Not yet verified
+		supportsSlashCommands: false, // Slash commands only in interactive mode
+		supportsSessionStorage: true, // ~/.copilot/session-state/
+		supportsCostTracking: true, // Premium request tracking
+		supportsUsageStats: true, // Token counts in output
+		supportsBatchMode: true, // -p flag for non-interactive
+		requiresPromptToStart: true, // Requires -p prompt
+		supportsStreaming: true, // Stream JSON events
+		supportsResultMessages: true, // Result event type
+		supportsModelSelection: true, // --model flag
+		supportsStreamJsonInput: false, // Uses --attachment for files
+		supportsThinkingDisplay: true, // Emits streaming assistant messages
+		supportsContextMerge: true, // Can receive merged context via prompts
+		supportsContextExport: true, // Session storage supports context export
+		supportsWizard: false, // Not yet integrated
+		supportsGroupChatModeration: true, // Can serve as group chat moderator
+		usesJsonLineOutput: true, // Uses JSONL output format
+		usesCombinedContextWindow: false, // Depends on model provider
+	},
+
+	/**
+	 * Cursor Agent - Cursor Agent CLI
+	 * Non-interactive mode with stream-json output.
+	 */
+	'cursor-agent': {
+		supportsResume: true, // --resume flag
+		supportsReadOnlyMode: true, // --mode plan
+		supportsJsonOutput: true, // --output-format stream-json
+		supportsSessionId: true, // Session ID in JSON output
+		supportsImageInput: false, // Not clearly documented
+		supportsImageInputOnResume: false, // Not yet verified
+		supportsSlashCommands: false, // No documented slash commands
+		supportsSessionStorage: false, // Storage location unknown
+		supportsCostTracking: false, // Not yet verified
+		supportsUsageStats: true, // Token counts in output
+		supportsBatchMode: true, // --print flag for non-interactive
+		requiresPromptToStart: true, // Requires prompt argument
+		supportsStreaming: true, // Stream JSON events
+		supportsResultMessages: true, // Result event type
+		supportsModelSelection: true, // --model flag
+		supportsStreamJsonInput: false, // Not documented
+		supportsThinkingDisplay: true, // Emits streaming assistant messages
+		supportsContextMerge: true, // Can receive merged context via prompts
+		supportsContextExport: false, // Storage location unknown
+		supportsWizard: false, // Not yet integrated
+		supportsGroupChatModeration: true, // Can serve as group chat moderator
+		usesJsonLineOutput: true, // Uses JSONL output format
+		usesCombinedContextWindow: false, // Depends on model provider
+	},
+
+	/**
 	 * Aider - Open source AI pair programming tool
 	 * https://github.com/paul-gauthier/aider
 	 *

@@ -21,6 +21,8 @@ export const AGENT_IDS = [
 	'qwen3-coder',
 	'opencode',
 	'factory-droid',
+	'copilot-cli',
+	'cursor-agent',
 	'aider',
 ] as const;
 

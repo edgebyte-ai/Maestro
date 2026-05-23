@@ -71,6 +71,20 @@ export const AGENT_TILES: AgentTile[] = [
 		description: "Factory's AI coding assistant",
 		brandColor: '#3B82F6', // Factory blue
 	},
+	{
+		id: 'copilot-cli',
+		name: 'Copilot CLI',
+		supported: true,
+		description: 'GitHub Copilot coding agent',
+		brandColor: '#238636', // GitHub green
+	},
+	{
+		id: 'cursor-agent',
+		name: 'Cursor Agent',
+		supported: true,
+		description: "Cursor's AI coding agent",
+		brandColor: '#6366F1', // Cursor indigo
+	},
 	// Coming soon agents at the bottom
 	{
 		id: 'gemini-cli',
@@ -88,9 +102,9 @@ export const AGENT_TILES: AgentTile[] = [
 	},
 ];
 
-// Grid dimensions for keyboard navigation (3 cols for 6 items)
+// Grid dimensions for keyboard navigation (3 cols for 8 items = 3 rows)
 const GRID_COLS = 3;
-const GRID_ROWS = 2;
+const GRID_ROWS = 3;
 
 /**
  * Get SVG logo for an agent with brand colors
@@ -216,6 +230,51 @@ export function AgentLogo({
 						stroke={color}
 						strokeWidth="2"
 						strokeLinecap="round"
+						strokeLinejoin="round"
+					/>
+				</svg>
+			);
+
+		case 'copilot-cli':
+			// Copilot CLI - GitHub Copilot logo (circle with spark)
+			return (
+				<svg
+					className="w-12 h-12"
+					viewBox="0 0 48 48"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					style={{ opacity }}
+				>
+					{/* GitHub Copilot - Octocat-inspired circular logo with spark */}
+					<circle cx="24" cy="24" r="18" stroke={color} strokeWidth="2" fill="none" />
+					<circle cx="24" cy="20" r="7" fill={color} fillOpacity="0.9" />
+					<path
+						d="M14 33c0-5.5 4.5-9 10-9s10 3.5 10 9"
+						stroke={color}
+						strokeWidth="2"
+						fill="none"
+						strokeLinecap="round"
+					/>
+				</svg>
+			);
+
+		case 'cursor-agent':
+			// Cursor Agent - cursor/arrow logo
+			return (
+				<svg
+					className="w-12 h-12"
+					viewBox="0 0 48 48"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					style={{ opacity }}
+				>
+					{/* Cursor - arrow cursor with AI spark */}
+					<path
+						d="M10 8l28 16-14 3-6 14z"
+						fill={color}
+						fillOpacity="0.9"
+						stroke={color}
+						strokeWidth="1"
 						strokeLinejoin="round"
 					/>
 				</svg>
